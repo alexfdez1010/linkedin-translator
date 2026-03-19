@@ -78,7 +78,7 @@ export async function translateToLinkedIn(
 
     const response = await client.chat.send({
       chatGenerationParams: {
-        model: 'openrouter/auto',
+        model: 'openrouter/free',
         maxTokens: 8192,
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
