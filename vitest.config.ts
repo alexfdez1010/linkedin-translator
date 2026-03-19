@@ -1,13 +1,15 @@
 import { defineConfig } from 'vitest/config';
-import { config } from 'dotenv';
+import { loadEnv } from 'vite';
+import path from 'path';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   test: {
-    testTimeout: 10000,
     environment: 'node',
-    setupFiles: './tests/setup.ts',
-    env: {
-      ...config().parsed,
+    env: loadEnv(mode ?? 'test', process.cwd(), ''),
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
     },
   },
-});
+}));
