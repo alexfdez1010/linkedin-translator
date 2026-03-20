@@ -59,70 +59,113 @@ export default function Home() {
     router.push(`/${newLocale}`);
   }
 
+  const charPercent = Math.min((input.length / 2000) * 100, 100);
+
   return (
-    <div className="min-h-screen flex flex-col sm:mt-24">
-      <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-4 py-3 sm:py-4 flex items-center gap-3">
-          <span className="text-2xl sm:text-3xl" role="img" aria-label="megaphone">
-            📢
-          </span>
-          <div className="flex-1">
-            <h1 className="text-lg sm:text-xl font-bold tracking-tight">
-              {t.header.title}
-            </h1>
-            <p className="text-xs sm:text-sm text-muted">
-              {t.header.subtitle}
-            </p>
-          </div>
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => switchLocale('en')}
-              className={`px-2 py-1 text-xs sm:text-sm rounded-md transition-colors cursor-pointer ${locale === 'en'
-                  ? 'bg-primary text-white font-semibold'
-                  : 'text-muted hover:text-foreground'
-                }`}
-            >
-              EN
-            </button>
-            <button
-              onClick={() => switchLocale('es')}
-              className={`px-2 py-1 text-xs sm:text-sm rounded-md transition-colors cursor-pointer ${locale === 'es'
-                  ? 'bg-primary text-white font-semibold'
-                  : 'text-muted hover:text-foreground'
-                }`}
-            >
-              ES
-            </button>
+    <div className="relative z-10 min-h-screen flex flex-col">
+      {/* ── Header ── */}
+      <header className="animate-fade-up sticky top-0 z-20">
+        <div className="glass-card border-t-0 rounded-none border-x-0">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center gap-4">
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-primary to-blue-700 flex items-center justify-center shadow-lg shrink-0"
+                   style={{ boxShadow: '0 4px 16px var(--primary-glow)' }}>
+                <span className="text-lg sm:text-xl" role="img" aria-label="megaphone">
+                  📢
+                </span>
+              </div>
+              <div className="min-w-0">
+                <h1 className="font-display text-lg sm:text-xl font-normal tracking-tight truncate">
+                  {t.header.title}
+                </h1>
+                <p className="text-xs sm:text-sm text-muted truncate">
+                  {t.header.subtitle}
+                </p>
+              </div>
+            </div>
+            <div className="locale-switch shrink-0">
+              <button
+                onClick={() => switchLocale('en')}
+                className={`locale-btn ${locale === 'en' ? 'locale-btn-active' : ''}`}
+              >
+                EN
+              </button>
+              <button
+                onClick={() => switchLocale('es')}
+                className={`locale-btn ${locale === 'es' ? 'locale-btn-active' : ''}`}
+              >
+                ES
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
-      <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-6 sm:py-8">
-        <div className="grid gap-6 md:grid-cols-2">
+      {/* ── Hero section ── */}
+      <div className="animate-fade-up max-w-5xl mx-auto w-full px-4 sm:px-6 pt-8 sm:pt-14 pb-2 text-center"
+           style={{ animationDelay: '0.1s' }}>
+        <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-primary mb-3">
+          {locale === 'es' ? 'Parodia profesional con IA' : 'AI-powered professional parody'}
+        </p>
+        <h2 className="font-display text-3xl sm:text-5xl md:text-6xl leading-tight tracking-tight">
+          {locale === 'es'
+            ? <>Tu texto. <span className="text-primary italic">Su energía.</span></>
+            : <>Your text. <span className="text-primary italic">Their energy.</span></>
+          }
+        </h2>
+        <p className="mt-3 sm:mt-4 text-sm sm:text-base text-muted max-w-lg mx-auto leading-relaxed">
+          {locale === 'es'
+            ? 'Convierte pensamientos normales en obras maestras de auto-bombo que harían llorar a cualquier CEO.'
+            : 'Turn normal thoughts into self-congratulatory masterpieces that would make any CEO weep with pride.'
+          }
+        </p>
+      </div>
+
+      {/* ── Main content ── */}
+      <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-10">
+        <div className="grid gap-5 sm:gap-6 md:grid-cols-2">
           {/* Input panel */}
-          <div className="flex flex-col gap-2 sm:gap-3">
+          <div className="animate-slide-left flex flex-col gap-3" style={{ animationDelay: '0.2s' }}>
             <label
               htmlFor="input"
-              className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-muted"
+              className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.15em] text-muted"
             >
+              <span className="w-1.5 h-1.5 rounded-full bg-primary inline-block" />
               {t.input.label}
             </label>
-            <textarea
-              id="input"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder={t.input.placeholder}
-              maxLength={2000}
-              className="min-h-[160px] sm:min-h-[220px] md:min-h-[300px] p-3 sm:p-4 rounded-xl bg-card border border-border resize-none focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all placeholder:text-muted/60 text-sm sm:text-base"
-            />
-            <div className="flex items-center justify-between gap-2">
-              <span className="text-xs text-muted shrink-0">
-                {input.length}/2000
-              </span>
+            <div className="glass-card rounded-2xl overflow-hidden">
+              <textarea
+                id="input"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder={t.input.placeholder}
+                maxLength={2000}
+                className="textarea-input w-full min-h-[160px] sm:min-h-[220px] md:min-h-[280px] p-4 sm:p-5 rounded-2xl text-sm sm:text-base border-0 bg-transparent"
+              />
+            </div>
+            <div className="flex items-center justify-between gap-3 px-1">
+              <div className="flex items-center gap-2">
+                <div className="relative w-8 h-8">
+                  <svg className="w-8 h-8 -rotate-90" viewBox="0 0 32 32">
+                    <circle cx="16" cy="16" r="13" fill="none" stroke="var(--border)" strokeWidth="2.5" />
+                    <circle
+                      cx="16" cy="16" r="13" fill="none"
+                      stroke={charPercent > 90 ? '#ef4444' : 'var(--primary)'}
+                      strokeWidth="2.5"
+                      strokeDasharray={`${charPercent * 0.8168} 81.68`}
+                      strokeLinecap="round"
+                      className="transition-all duration-300"
+                    />
+                  </svg>
+                </div>
+                <span className={`text-xs tabular-nums ${charPercent > 90 ? 'text-red-500 font-semibold' : 'text-muted'}`}>
+                  {input.length}<span className="text-muted/50">/2000</span>
+                </span>
+              </div>
               <button
                 onClick={handleTranslate}
                 disabled={loading || !input.trim()}
-                className="px-4 sm:px-6 py-2 sm:py-2.5 bg-primary text-white font-semibold rounded-full hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95 cursor-pointer text-sm sm:text-base whitespace-nowrap"
+                className="btn-translate px-5 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base group"
               >
                 {loading ? (
                   <span className="flex items-center gap-2">
@@ -134,101 +177,106 @@ export default function Home() {
                     {t.input.translating}
                   </span>
                 ) : (
-                  <>
+                  <span className="flex items-center gap-2">
                     <span className="hidden sm:inline">{t.input.translateFull}</span>
                     <span className="sm:hidden">{t.input.translateShort}</span>
-                  </>
+                    <span className="arrow-icon">→</span>
+                  </span>
                 )}
               </button>
             </div>
           </div>
 
           {/* Output panel */}
-          <div ref={resultRef} className="flex flex-col gap-2 sm:gap-3">
+          <div ref={resultRef} className="animate-slide-right flex flex-col gap-3" style={{ animationDelay: '0.3s' }}>
             <div className="flex items-center justify-between">
-              <label className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-muted">
+              <label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.15em] text-muted">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block" />
                 {t.output.label}
               </label>
               {result && (
-                <button
-                  onClick={handleCopy}
-                  className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border border-border hover:border-primary hover:text-primary transition-colors cursor-pointer text-muted"
-                  title="Copy to clipboard"
-                >
+                <button onClick={handleCopy} className="btn-copy animate-fade-in">
                   {copied ? t.output.copied : t.output.copy}
                 </button>
               )}
             </div>
             <div
-              className={`rounded-xl bg-card border border-border overflow-y-auto scroll-smooth ${result
-                  ? 'min-h-[200px] max-h-[60vh] md:max-h-[70vh]'
-                  : 'min-h-[160px] sm:min-h-[220px] md:min-h-[300px]'
-                }`}
+              className={`glass-card rounded-2xl overflow-y-auto scroll-smooth output-glow ${
+                result ? 'output-glow-active min-h-[200px] max-h-[60vh] md:max-h-[70vh]' : 'min-h-[160px] sm:min-h-[220px] md:min-h-[280px]'
+              }`}
             >
-              <div className="p-3 sm:p-4">
+              <div className="p-4 sm:p-5">
                 {error && (
-                  <p className="text-red-500 text-sm">{error}</p>
+                  <div className="flex items-start gap-2 text-red-500 text-sm animate-fade-up">
+                    <span className="shrink-0 mt-0.5">⚠</span>
+                    <p>{error}</p>
+                  </div>
                 )}
                 {!result && !error && !loading && (
-                  <p className="text-muted/40 italic text-sm">
+                  <p className="text-muted/30 italic text-sm">
                     {t.output.placeholder}
                   </p>
                 )}
                 {loading && !result && (
-                  <div className="flex items-center gap-2 text-muted">
-                    <span className="flex gap-1">
-                      <span className="loading-dot w-2 h-2 bg-primary rounded-full inline-block" />
-                      <span className="loading-dot w-2 h-2 bg-primary rounded-full inline-block" />
-                      <span className="loading-dot w-2 h-2 bg-primary rounded-full inline-block" />
+                  <div className="flex items-center gap-3 text-muted py-4">
+                    <span className="flex gap-1.5">
+                      <span className="loading-dot w-2.5 h-2.5 bg-primary rounded-full inline-block" />
+                      <span className="loading-dot w-2.5 h-2.5 bg-primary rounded-full inline-block" />
+                      <span className="loading-dot w-2.5 h-2.5 bg-primary rounded-full inline-block" />
                     </span>
-                    <span className="text-sm">{t.output.generating}</span>
+                    <span className="text-sm font-medium">{t.output.generating}</span>
                   </div>
                 )}
                 {result && (
-                  <div className="whitespace-pre-wrap text-sm leading-relaxed break-words">
+                  <div className="result-text whitespace-pre-wrap text-sm sm:text-base leading-relaxed break-words">
                     {result}
                   </div>
                 )}
               </div>
             </div>
             {result && (
-              <p className="text-xs text-muted text-center italic">
+              <p className="text-xs text-muted text-center italic px-2 animate-fade-in" style={{ animationDelay: '0.3s' }}>
                 {t.output.disclaimer}
               </p>
             )}
           </div>
         </div>
 
-        {/* Examples */}
-        <section className="mt-8 sm:mt-12 text-center">
-          <h2 className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-muted mb-3 sm:mb-4">
+        {/* ── Examples ── */}
+        <section className="mt-10 sm:mt-16 text-center animate-fade-up" style={{ animationDelay: '0.4s' }}>
+          <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-muted mb-4 sm:mb-5">
             {t.examples.title}
           </h2>
-          <div className="flex flex-wrap gap-1.5 sm:gap-2 justify-center">
-            {t.examples.items.map((example) => (
+          <div className="flex flex-wrap gap-2 sm:gap-2.5 justify-center max-w-2xl mx-auto">
+            {t.examples.items.map((example, i) => (
               <button
                 key={example}
                 onClick={() => setInput(example)}
-                className="px-2.5 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm rounded-full border border-border hover:border-primary hover:text-primary transition-colors cursor-pointer"
+                className="chip px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm"
+                style={{ animationDelay: `${0.45 + i * 0.06}s` }}
               >
-                {example}
+                <span className="relative z-10">{example}</span>
               </button>
             ))}
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-border py-4 sm:py-6 text-center text-xs sm:text-sm text-muted px-4">
-        <p>
-          {t.footer.text}{' '}
-          <a
-            href="https://github.com/alexfdez1010/linkedin-translator"
-            className="underline hover:text-foreground transition-colors"
-          >
-            {t.footer.openSource}
-          </a>{' '}
-          &middot; {t.footer.poweredBy}
-        </p>
+      {/* ── Footer ── */}
+      <footer className="relative z-10 py-6 sm:py-8 text-center text-xs sm:text-sm text-muted px-4 animate-fade-in" style={{ animationDelay: '0.6s' }}>
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-0">
+          <p>
+            {t.footer.text}{' '}
+            <a
+              href="https://github.com/alexfdez1010/linkedin-translator"
+              className="underline underline-offset-2 decoration-border hover:decoration-primary hover:text-primary transition-colors"
+            >
+              {t.footer.openSource}
+            </a>
+          </p>
+          <span className="hidden sm:inline mx-2 text-border">·</span>
+          <p>{t.footer.poweredBy}</p>
+        </div>
       </footer>
     </div>
   );
