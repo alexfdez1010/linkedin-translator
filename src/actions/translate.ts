@@ -19,6 +19,7 @@ export async function translateToLinkedIn(
   if (text.length > 2000) {
     return { error: 'Text must be 2000 characters or less' };
   }
+  
 
   const apiKey = process.env.OPENROUTER_API_KEY;
 
