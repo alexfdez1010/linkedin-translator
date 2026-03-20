@@ -7,11 +7,13 @@ Turn normal human text into the exaggerated, self-congratulatory, inspirational-
 ## Features
 
 - **Sarcastic translations** — brutally accurate parodies of LinkedIn culture
-- **Any language** — write in Spanish, French, Japanese, whatever — the response matches your language
+- **Localized UI** — full English and Spanish interface via `next-i18n-router`
+- **Localized LLM prompts** — each language has its own system prompt for better AI output
+- **Plain text output** — the LLM is instructed to return plain text (no markdown)
 - **One-click copy** — easily copy the result to your clipboard
-- **Example prompts** — try pre-built examples to see it in action
+- **Example prompts** — try pre-built examples (localized per language)
 - **Dark mode** — respects your system preference
-- **Fast** — powered by OpenRouter's free AI models
+- **Free** — uses the `openrouter/free` endpoint, so no API credits are needed
 
 ## Getting Started
 
@@ -53,7 +55,26 @@ OPENROUTER_API_KEY=your_key_here
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) and start translating.
+Open [http://localhost:3000](http://localhost:3000) and start translating. You'll be redirected to `/en` or `/es` based on your browser language.
+
+## Internationalization (i18n)
+
+The app uses [`next-i18n-router`](https://github.com/i18nexus/next-i18n-router) for locale-based routing:
+
+- **Supported locales**: `en` (English), `es` (Spanish)
+- **Default locale**: `en`
+- **URL structure**: `/en`, `/es` — the middleware auto-detects browser language and redirects
+- **UI translations**: stored in `src/i18n/dictionaries/`
+- **LLM prompts**: each locale has a dedicated system prompt in `src/i18n/prompts.ts` for optimal AI output in that language
+
+### Adding a new language
+
+1. Add the locale code to `src/i18n/config.ts`
+2. Create a new dictionary file in `src/i18n/dictionaries/<locale>.json`
+3. Register it in `src/i18n/dictionaries.ts`
+4. Add a new system prompt in `src/i18n/prompts.ts`
+5. Add the inline dictionary in `src/app/[locale]/page.tsx`
+6. Add a language switcher button in the header
 
 ## Deploy to Vercel
 
@@ -63,9 +84,10 @@ Open [http://localhost:3000](http://localhost:3000) and start translating.
 
 ## Tech Stack
 
-- [Next.js](https://nextjs.org/) (App Router)
+- [Next.js](https://nextjs.org/) 16 (App Router)
 - [Tailwind CSS](https://tailwindcss.com/) 4
-- [OpenRouter](https://openrouter.ai/) (free AI models)
+- [next-i18n-router](https://github.com/i18nexus/next-i18n-router) (i18n routing)
+- [OpenRouter](https://openrouter.ai/) (`openrouter/free` endpoint — no API credits required)
 
 ## Contributing
 

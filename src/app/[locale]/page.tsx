@@ -1,9 +1,16 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { translateToLinkedIn } from './actions/translate';
+import { useParams, useRouter } from 'next/navigation';
+import { translateToLinkedIn } from '@/actions/translate';
+import { getDictionary } from '@/i18n/dictionaries';
 
 export default function Home() {
+  const params = useParams();
+  const router = useRouter();
+  const locale = (params.locale as string) ?? 'en';
+  const t = getDictionary(locale);
+
   const [input, setInput] = useState('');
   const [result, setResult] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,7 +26,7 @@ export default function Home() {
     setResult('');
 
     try {
-      const data = await translateToLinkedIn(input.trim());
+      const data = await translateToLinkedIn(input.trim(), locale);
 
       if (data.error) {
         setError(data.error);
@@ -28,7 +35,6 @@ export default function Home() {
 
       setResult(data.result ?? '');
 
-      // On mobile, scroll to result after translation
       setTimeout(() => {
         resultRef.current?.scrollIntoView({
           behavior: 'smooth',
@@ -36,7 +42,7 @@ export default function Home() {
         });
       }, 100);
     } catch {
-      setError('Something went wrong. Please try again.');
+      setError(t.errors.generic);
     } finally {
       setLoading(false);
     }
@@ -49,20 +55,44 @@ export default function Home() {
     setTimeout(() => setCopied(false), 2000);
   }
 
+  function switchLocale(newLocale: string) {
+    router.push(`/${newLocale}`);
+  }
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col sm:mt-24">
       <header className="border-b border-border bg-card/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-3 sm:py-4 flex items-center gap-3">
           <span className="text-2xl sm:text-3xl" role="img" aria-label="megaphone">
             📢
           </span>
-          <div>
+          <div className="flex-1">
             <h1 className="text-lg sm:text-xl font-bold tracking-tight">
-              LinkedIn Translator
+              {t.header.title}
             </h1>
             <p className="text-xs sm:text-sm text-muted">
-              Turn normal text into insufferable LinkedIn posts
+              {t.header.subtitle}
             </p>
+          </div>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => switchLocale('en')}
+              className={`px-2 py-1 text-xs sm:text-sm rounded-md transition-colors cursor-pointer ${locale === 'en'
+                  ? 'bg-primary text-white font-semibold'
+                  : 'text-muted hover:text-foreground'
+                }`}
+            >
+              EN
+            </button>
+            <button
+              onClick={() => switchLocale('es')}
+              className={`px-2 py-1 text-xs sm:text-sm rounded-md transition-colors cursor-pointer ${locale === 'es'
+                  ? 'bg-primary text-white font-semibold'
+                  : 'text-muted hover:text-foreground'
+                }`}
+            >
+              ES
+            </button>
           </div>
         </div>
       </header>
@@ -75,13 +105,13 @@ export default function Home() {
               htmlFor="input"
               className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-muted"
             >
-              Normal human text
+              {t.input.label}
             </label>
             <textarea
               id="input"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="I made coffee this morning..."
+              placeholder={t.input.placeholder}
               maxLength={2000}
               className="min-h-[160px] sm:min-h-[220px] md:min-h-[300px] p-3 sm:p-4 rounded-xl bg-card border border-border resize-none focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all placeholder:text-muted/60 text-sm sm:text-base"
             />
@@ -101,12 +131,12 @@ export default function Home() {
                       <span className="loading-dot w-1.5 h-1.5 bg-white rounded-full inline-block" />
                       <span className="loading-dot w-1.5 h-1.5 bg-white rounded-full inline-block" />
                     </span>
-                    Translating
+                    {t.input.translating}
                   </span>
                 ) : (
                   <>
-                    <span className="hidden sm:inline">🚀 Translate to LinkedIn</span>
-                    <span className="sm:hidden">🚀 Translate</span>
+                    <span className="hidden sm:inline">{t.input.translateFull}</span>
+                    <span className="sm:hidden">{t.input.translateShort}</span>
                   </>
                 )}
               </button>
@@ -117,7 +147,7 @@ export default function Home() {
           <div ref={resultRef} className="flex flex-col gap-2 sm:gap-3">
             <div className="flex items-center justify-between">
               <label className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-muted">
-                LinkedIn version
+                {t.output.label}
               </label>
               {result && (
                 <button
@@ -125,20 +155,15 @@ export default function Home() {
                   className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border border-border hover:border-primary hover:text-primary transition-colors cursor-pointer text-muted"
                   title="Copy to clipboard"
                 >
-                  {copied ? (
-                    <>✅ Copied</>
-                  ) : (
-                    <>📋 Copy</>
-                  )}
+                  {copied ? t.output.copied : t.output.copy}
                 </button>
               )}
             </div>
             <div
-              className={`rounded-xl bg-card border border-border overflow-y-auto scroll-smooth ${
-                result
+              className={`rounded-xl bg-card border border-border overflow-y-auto scroll-smooth ${result
                   ? 'min-h-[200px] max-h-[60vh] md:max-h-[70vh]'
                   : 'min-h-[160px] sm:min-h-[220px] md:min-h-[300px]'
-              }`}
+                }`}
             >
               <div className="p-3 sm:p-4">
                 {error && (
@@ -146,7 +171,7 @@ export default function Home() {
                 )}
                 {!result && !error && !loading && (
                   <p className="text-muted/40 italic text-sm">
-                    Your insufferable LinkedIn post will appear here...
+                    {t.output.placeholder}
                   </p>
                 )}
                 {loading && !result && (
@@ -156,7 +181,7 @@ export default function Home() {
                       <span className="loading-dot w-2 h-2 bg-primary rounded-full inline-block" />
                       <span className="loading-dot w-2 h-2 bg-primary rounded-full inline-block" />
                     </span>
-                    <span className="text-sm">Generating cringe...</span>
+                    <span className="text-sm">{t.output.generating}</span>
                   </div>
                 )}
                 {result && (
@@ -168,8 +193,7 @@ export default function Home() {
             </div>
             {result && (
               <p className="text-xs text-muted text-center italic">
-                Please don&apos;t actually post this. Or do. We won&apos;t judge.
-                (We will.)
+                {t.output.disclaimer}
               </p>
             )}
           </div>
@@ -178,16 +202,10 @@ export default function Home() {
         {/* Examples */}
         <section className="mt-8 sm:mt-12 text-center">
           <h2 className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-muted mb-3 sm:mb-4">
-            Try these
+            {t.examples.title}
           </h2>
           <div className="flex flex-wrap gap-1.5 sm:gap-2 justify-center">
-            {[
-              'I ate lunch at my desk today',
-              'I got a new job',
-              'I went for a walk',
-              'My code finally compiled',
-              'I read a book this weekend',
-            ].map((example) => (
+            {t.examples.items.map((example) => (
               <button
                 key={example}
                 onClick={() => setInput(example)}
@@ -202,14 +220,14 @@ export default function Home() {
 
       <footer className="border-t border-border py-4 sm:py-6 text-center text-xs sm:text-sm text-muted px-4">
         <p>
-          Built to expose the absurdity of LinkedIn culture.{' '}
+          {t.footer.text}{' '}
           <a
             href="https://github.com/alexfdez1010/linkedin-translator"
             className="underline hover:text-foreground transition-colors"
           >
-            Open Source
+            {t.footer.openSource}
           </a>{' '}
-          &middot; Powered by sarcasm and AI
+          &middot; {t.footer.poweredBy}
         </p>
       </footer>
     </div>
