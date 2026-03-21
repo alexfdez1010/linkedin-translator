@@ -1,47 +1,47 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f0f4f8;
+  --background: #f8fafc;
   --foreground: #0f172a;
-  --card: rgba(255, 255, 255, 0.72);
+  --card: rgba(255, 255, 255, 0.75);
   --card-solid: #ffffff;
-  --primary: #0a66c2;
-  --primary-hover: #004182;
-  --primary-glow: rgba(10, 102, 194, 0.35);
-  --accent: #e7a019;
-  --accent-glow: rgba(231, 160, 25, 0.3);
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --primary-glow: rgba(59, 130, 246, 0.35);
+  --accent: #d946ef;
+  --accent-glow: rgba(217, 70, 239, 0.3);
   --border: rgba(148, 163, 184, 0.25);
   --border-strong: rgba(148, 163, 184, 0.4);
   --muted: #64748b;
-  --surface-hover: rgba(10, 102, 194, 0.06);
+  --surface-hover: rgba(59, 130, 246, 0.06);
 
   /* Mesh gradient colors */
   --mesh-1: #dbeafe;
-  --mesh-2: #ede9fe;
-  --mesh-3: #fef3c7;
+  --mesh-2: #f3e8ff;
+  --mesh-3: #fdf4ff;
   --mesh-4: #e0f2fe;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #040b18;
-    --foreground: #e8edf5;
-    --card: rgba(15, 25, 50, 0.65);
-    --card-solid: #0f1932;
-    --primary: #4a9eed;
-    --primary-hover: #6bb5ff;
-    --primary-glow: rgba(74, 158, 237, 0.3);
-    --accent: #f5b731;
-    --accent-glow: rgba(245, 183, 49, 0.25);
-    --border: rgba(100, 120, 160, 0.2);
-    --border-strong: rgba(100, 120, 160, 0.35);
-    --muted: #8b9dc3;
-    --surface-hover: rgba(74, 158, 237, 0.08);
+    --background: #020617;
+    --foreground: #f8fafc;
+    --card: rgba(15, 23, 42, 0.65);
+    --card-solid: #0f172a;
+    --primary: #60a5fa;
+    --primary-hover: #93c5fd;
+    --primary-glow: rgba(96, 165, 250, 0.3);
+    --accent: #e879f9;
+    --accent-glow: rgba(232, 121, 249, 0.25);
+    --border: rgba(148, 163, 184, 0.15);
+    --border-strong: rgba(148, 163, 184, 0.35);
+    --muted: #94a3b8;
+    --surface-hover: rgba(96, 165, 250, 0.08);
 
-    --mesh-1: #0c1a3a;
-    --mesh-2: #14102a;
-    --mesh-3: #1a1508;
-    --mesh-4: #081828;
+    --mesh-1: #0f172a;
+    --mesh-2: #2e1065;
+    --mesh-3: #1e1b4b;
+    --mesh-4: #082f49;
   }
 }
 
@@ -59,9 +59,9 @@
   --color-border-strong: var(--border-strong);
   --color-muted: var(--muted);
   --color-surface-hover: var(--surface-hover);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
-  --font-display: var(--font-dm-serif);
+  --font-display: var(--font-outfit);
 }
 
 /* ─── Base ─── */
@@ -69,7 +69,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
 }
 
 /* ─── Animated mesh gradient background ─── */
@@ -161,13 +161,14 @@ body {
 
 .glass-card {
   background: var(--card);
-  backdrop-filter: blur(24px) saturate(1.4);
-  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  backdrop-filter: blur(32px) saturate(1.5);
+  -webkit-backdrop-filter: blur(32px) saturate(1.5);
   border: 1px solid var(--border);
   box-shadow:
     0 1px 2px rgba(0, 0, 0, 0.04),
     0 4px 16px rgba(0, 0, 0, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 1px 0 0 rgba(255, 255, 255, 0.05);
   transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
@@ -227,7 +228,7 @@ body {
 }
 
 .btn-translate:active:not(:disabled) {
-  transform: translateY(0) scale(0.97);
+  transform: translateY(0) scale(0.95);
 }
 
 .btn-translate:disabled {

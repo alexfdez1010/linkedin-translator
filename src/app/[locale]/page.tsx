@@ -68,11 +68,11 @@ export default function Home() {
         <div className="glass-card border-t-0 rounded-none border-x-0">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center gap-4">
             <div className="flex items-center gap-3 flex-1 min-w-0">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-primary to-blue-700 flex items-center justify-center shadow-lg shrink-0"
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shrink-0 text-white"
                    style={{ boxShadow: '0 4px 16px var(--primary-glow)' }}>
-                <span className="text-lg sm:text-xl" role="img" aria-label="megaphone">
-                  📢
-                </span>
+                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                </svg>
               </div>
               <div className="min-w-0">
                 <h1 className="font-display text-lg sm:text-xl font-normal tracking-tight truncate">
@@ -109,8 +109,8 @@ export default function Home() {
         </p>
         <h2 className="font-display text-3xl sm:text-5xl md:text-6xl leading-tight tracking-tight">
           {locale === 'es'
-            ? <>Tu texto. <span className="text-primary italic">Su energía.</span></>
-            : <>Your text. <span className="text-primary italic">Their energy.</span></>
+            ? <>Tu texto. <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent italic">Su energía.</span></>
+            : <>Your text. <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent italic">Their energy.</span></>
           }
         </h2>
         <p className="mt-3 sm:mt-4 text-sm sm:text-base text-muted max-w-lg mx-auto leading-relaxed">
@@ -252,7 +252,7 @@ export default function Home() {
               <button
                 key={example}
                 onClick={() => setInput(example)}
-                className="chip px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm"
+                className="chip px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm active:scale-95 transition-transform"
                 style={{ animationDelay: `${0.45 + i * 0.06}s` }}
               >
                 <span className="relative z-10">{example}</span>
