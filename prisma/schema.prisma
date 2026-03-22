@@ -1,0 +1,19 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model SharedTranslation {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  originalText   String
+  translatedText String
+  locale         String   @default("en")
+  createdAt      DateTime @default(now())
+
+  @@index([slug])
+}
