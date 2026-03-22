@@ -29,9 +29,9 @@ const es: Dictionary = {
     placeholder:
       'Tu insoportable publicación de LinkedIn aparecerá aquí...',
     generating: 'Generando cringe...',
-    copied: '✅ Copiado',
-    copy: '📋 Copiar',
-    share: '🔗 Compartir',
+    copied: 'Copiado',
+    copy: 'Copiar',
+    share: 'Compartir',
     editHint: 'Haz clic para editar',
     dialogTitle: 'Compartir esta traducción',
     dialogDescription: 'Copia el enlace de abajo para compartir tu traducción de LinkedIn con cualquiera.',
